@@ -41,6 +41,7 @@ public class AttributeCount {
 		job.setMapperClass(AttributeCountMapper.class);
 		job.setCombinerClass(AttributeCountReducer.class);
 		job.setReducerClass(AttributeCountReducer.class);
+		job.setNumReduceTasks(5);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(LongWritable.class);
 		job.setOutputKeyClass(Text.class);
