@@ -12,7 +12,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 
 
-public class AttributeCountReducer extends  Reducer<Text, LongWritable, Text, LongWritable> {
+public class CountReducer extends  Reducer<Text, LongWritable, Text, LongWritable> {
 
 
 
