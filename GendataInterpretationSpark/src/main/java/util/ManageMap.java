@@ -3,6 +3,8 @@ package util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class ManageMap {
 	
@@ -22,6 +24,11 @@ public class ManageMap {
 		contain.add(maxCurrent);
 		contain.add(max);
 		return contain;
+	}
+	
+	public void printMap(Map<String, HashSet<String>> mapOutput) {
+		for(String o : mapOutput.keySet())
+			System.out.println(o+"\t"+mapOutput.get(o).toString());
 	}
 	
 }

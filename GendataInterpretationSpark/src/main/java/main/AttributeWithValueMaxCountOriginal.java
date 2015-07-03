@@ -1,8 +1,7 @@
 package main;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +24,6 @@ public class AttributeWithValueMaxCountOriginal {
 	public static void main(String[] args) {
 		SparkConf conf = new SparkConf().setAppName("Max Count");
 		JavaSparkContext sc = new JavaSparkContext(conf);
-		//sc.clearFiles();
 		JavaRDD<String> logData = sc.textFile(args[0]);
 		MakeJavaRDDFromMap mjr = new MakeJavaRDDFromMap();
 		JavaPairRDD<String, String> wordOne = mjr.mapStringToString(logData);
@@ -60,21 +58,22 @@ public class AttributeWithValueMaxCountOriginal {
 
 			}
 		});
+		JavaPairRDD<Long, String> mapToMaxOrderByValue = mapToMax.mapToPair(new PairFunction<Tuple2<String,Long>, Long, String>() {
+
+			public Tuple2<Long, String> call(Tuple2<String, Long> tupl)
+					throws Exception {
+				
+				return new Tuple2<Long, String>(tupl._2(), tupl._1());
+			}
+		}).sortByKey(false);
 		
 		
-		/*List<Tuple2<String, String>> wordTotalCouple = wordTotal.collect();
-		for (Tuple2<String, String> w : wordTotalCouple) { 
+		List<Tuple2<Long, String>> wordTotalCouple2 = mapToMaxOrderByValue.collect();
+		for (Tuple2<Long, String> w : wordTotalCouple2) { 
 			
-				System.out.println(w._1() + "\t" + w._2());
-		}*/
-		List<Tuple2<String, Long>> wordTotalCouple2 = mapToMax.collect();
-		for (Tuple2<String, Long> w : wordTotalCouple2) { 
-			
-				System.out.println(w._1() + "\t" + w._2());
+				System.out.println(w._2() + "\t" + w._1());
 		}
-	    /*List<Tuple2<Tuple2<String, Long>, Object>> wordTotalCouple = orderedFull.collect();
-		for (Tuple2<Tuple2<String, Long>, Object> w : wordTotalCouple)
-			System.out.println(w._1()._1()+"\t"+w._1()._2());*/
+	  
 		sc.cancelAllJobs();
 		sc.clearCallSite();
 		sc.close();
